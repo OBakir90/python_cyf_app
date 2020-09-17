@@ -4,10 +4,12 @@ order = False
 entrance = input('''
     Hello, 
     This app shows CYF Manchester Class Students names and grades
-    You can see all students by ordering show_all
-    You can see a student by ordering show_one
-    You can add a new student by ordering add_student
-    You can update a student' grade by ordering update
+    You can see all students by ordering 'show_all'
+    You can see a student by ordering 'show_one'
+    You can add a new student by ordering 'add_student'
+    You can update a student' grade by ordering 'update'
+    You can get the average of class by 'average_grade'
+    You can close the app by ordering 'finish'
     Would you like to go on ? Yes or No : 
 ''')
 
@@ -35,19 +37,41 @@ students = {
 def show_all():
     print(students)
 
+
 def show_one(name):
     print(students.get(name))
+
 
 def add_student(name,grade):
     if name in students:
         print('We already have a student with this name')
         return
-    students[name] = grade
-    print(f"{name} is added with grade {students.get(name)}")
+
+    if grade not in [1-10]:
+        print('Level must be between 1-10')
+        return
+
+    try:
+        students[name] = int(grade)
+        print(f"{name} is added with grade {students.get(name)}")
+    except ValueError:
+        print('Please type a number as a level')
 
 def update (name, grade):
-    students[name] = grade
-    print(f"{name}'s grade is updated as {students.get(name)}")
+
+    if grade not in [1 - 10]:
+        print('Level must be between 1-10')
+        return
+    try:
+        students[name] = int(grade)
+        print(f"{name}'s grade is updated as {students.get(name)}")
+    except ValueError:
+        print('Please type a number as a level')
+
+
+def get_avg ():
+    avg = sum(students.values())/len(students)
+    print(f'Average grade of class is {avg}')
 
 def finish ():
     global order
@@ -59,7 +83,8 @@ reducer = {
     'show_one': show_one,
     'add_student':add_student,
     'update': update,
-    'finish':finish
+    'average_grade': get_avg,
+    'finish': finish
 }
 
 while order:
@@ -72,6 +97,6 @@ while order:
         name = input('name:  ')
         grade = input('grade:  ')
         my_function(name, grade)
-    elif msg in {'show_all', 'finish'}:
+    elif msg in {'show_all', 'finish', 'average_grade'}:
         my_function()
     else : print ('Request is not recognised')
